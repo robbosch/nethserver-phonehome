@@ -5,13 +5,18 @@ Tracking all NethServer's installations around the world.
   - Use API to get and set installation
   - Visualize the installations in Google Maps with nice markers
 
+Files:
+* ```root``` directory: contains alla data to create the client rpm
+* ```server``` directory: contains all scripts for server-side installation
+
+## Server
 
 ### Installation
 
 You need to set the correct placeholder to get access of DataBase and REST API.
 
 ##### Change placeholders
-File ```index.php``` line ```5-9``` change ```__dbhost__, __dbuser__, __dbpass__, __dbname__```
+File ```config.php``` line ```5-9``` change ```__dbhost__, __dbuser__, __dbpass__, __dbname__```
 ```sh
   // credentials
   $GLOBALS['$dbhost'] = "__dbhost__";
@@ -26,24 +31,7 @@ File ```widget_map.html``` line ```36``` change ``` __serverip__```
 var server_ip = '__serverip__';
 ```
 
-##### Add configuration options
-Create file in ```/etc/sysconfig/``` named ```phone-home``` and set the correct infos
-```sh
-SERVER_IP=__serverip__
-PROXY_SERVER=__proxyserver__
-PROXY_USER=__proxyuser__
-PROXY_PASS=__proxypass__
-PROXY_PORT=__proxyport__
-```
-the variables ```PROXY_SERVER, PROXY_USER, PROXY_PASS, PROXY_PORT``` are not mandatory.
-
-##### Add new record for phone-home
-Simply run: 
-```sh 
-config set phone-home configuration status enabled
-```
-
-##### Create table in your db
+##### Create table and db
 Simply run: (MySQL Syntax)
 
 ```sh
@@ -58,3 +46,30 @@ CREATE TABLE IF NOT EXISTS phone_home_tb (
   reg_date              TIMESTAMP
 )
 ```
+
+## Client
+
+### Installation
+
+#### Configuration file
+
+Create file in ```/etc/sysconfig/``` named ```phone-home``` and set the correct infos
+```sh
+SERVER_IP=__serverip__
+PROXY_SERVER=__proxyserver__
+PROXY_USER=__proxyuser__
+PROXY_PASS=__proxypass__
+PROXY_PORT=__proxyport__
+```
+the variables ```PROXY_SERVER, PROXY_USER, PROXY_PASS, PROXY_PORT``` are not mandatory.
+
+#### Add new record for phone-home
+
+Simply run: 
+```sh 
+config set phone-home configuration status enabled
+```
+
+#### Run phone-home 
+
+Copy the phonehome script to /etc/cron.weekly directory.
