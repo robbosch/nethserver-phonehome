@@ -1,0 +1,197 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Phone Home</title>
+
+    <!-- Used for set map sizes-->
+    <style type="text/css">
+      #map {
+        width: 100%;
+        height: 100%;
+      }
+      .tftable {
+        font-size:12px;color:#333333;width:100%;border-width: 1px;border-color: #729ea5;border-collapse: collapse;
+      }
+      .tftable th {
+        font-size:12px;background-color:#acc8cc;border-width: 1px;padding: 3px;border-style: solid;border-color: #729ea5;
+      }
+      .tftable tr {background-color:#ffffff;}
+      .tftable td {font-size:12px;border-width: 1px;padding: 3px;border-style: solid;border-color: #729ea5;}
+      .tftable tr:hover {background-color:#ffff99;}
+      td {
+        text-align: center;
+      }
+      tr {
+        text-align: center;
+      }
+
+
+    </style>
+
+    <!-- Include maps and jquery libs -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <!-- Include MarkerClusterer script -->
+    <script type="text/javascript">
+
+      var script = '<script type="text/javascript" src="src/markerclusterer';
+      if (document.location.search.indexOf('compiled') !== -1) {
+        script += '_compiled';
+      }
+
+      script += '.js"><' + '/script>';
+      document.write(script);
+
+    </script>
+
+    <!-- Core script, used to add marker on map by number of installation-->
+    <script type="text/javascript">
+
+      // ip server with api
+      var server_ip = '__serverip__';
+
+      function initialize() {
+
+        var center = new google.maps.LatLng(27.9027835, 17.4963655);
+	  	  var markers = [];
+        var nethservers;
+
+        // creating the map centered
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 3,
+          center: center,
+          scrollwheel: false,
+          disableDefaultUI: true,
+          disableDoubleClickZoom: true
+        });
+
+        // using API to get installation info
+        $.ajax({
+	        url: "http://"+server_ip+"/phone-home/index.php?",
+	        type: "POST",
+	        data: "method=get_info",
+	        success: function (resp) {
+
+	          var respObj = JSON.parse(resp);
+	          var jsObj = JSON.parse(respObj);
+	          nethservers = jsObj.nethservers;
+
+
+	          for (var i = 0; i < nethservers.length; i++) {
+  		        // get info from js object
+              var release_tag 		  = nethservers[i].release_tag;
+  		        var country_name 		  = nethservers[i].country_name;
+  		        var num_installation 	= nethservers[i].num_installation;
+              var country_lat       = nethservers[i].country_location_lat;
+              var country_lng       = nethservers[i].country_location_lng;
+
+              // add marker of installation by number and location
+              for(var j = 0; j < num_installation; j++) {
+                var latlng = new google.maps.LatLng(country_lat, country_lng);
+                var marker = new google.maps.Marker({
+                  position: latlng,
+                  title: country_name + '|' + release_tag
+                });
+                markers.push(marker);
+              }
+
+              
+              
+              // add marker on the map
+              var markerClusterer = new MarkerClusterer(map, markers);
+
+              // set click event on cluster
+              google.maps.event.addListener(markerClusterer, 'clusterclick', function(cluster) {
+
+                  // delcaring some useful vars
+                  var markers = cluster.markers_;
+                  var release_num = [];
+                  var country_name;
+                  var totalInstallation = markers.length;
+                  var text_to_show = '';
+
+                  // split 'title' attribute of marker
+                  // to get infos
+                  for(var k = 0; k < totalInstallation; k++) {
+                    var values = markers[k].title.split('|');
+                    release_num.push(values[1]);
+                    country_name = values[0];
+                  }
+                    
+                  // call method that count occurency
+                  var result_count_release = count_occurency(release_num);
+
+                  // composing the html template
+                  for(var x = 0; x < result_count_release[0].length; x++) {
+                    text_to_show += '<tr><td>'+result_count_release[0][x]+'</td><td>'+result_count_release[1][x]+'</td></tr>';
+                  }
+
+                  // join templates
+                  var content =  '<div id="content" style="">'+
+                                  '<div id="siteNotice">'+
+                                  '</div>'+
+                                 '<h2 id="firstHeading" class="firstHeading">'+country_name+'</h2>'+
+                                  '<div id="bodyContent">'+
+                                  '<table class="tftable" border="1">' +
+                                  '<p><tr><th>Release</th><th># Installation</th></tr>' +
+                                  text_to_show +
+                                  '</table></p>' +
+                                  '</div>'+
+                                 '</div>';
+
+                  // convert lat/long from cluster object to a usable MVCObject
+                  var info = new google.maps.MVCObject;
+                  info.set('position', cluster.center_);
+
+                  // show infowindows
+                  var infowindow = new google.maps.InfoWindow();
+                  infowindow.close();
+                  infowindow.setContent(content);
+                  infowindow.open(map, info);
+                  
+              });
+
+            }
+		      
+	        },
+	        error: function(e) {
+	        	console.log("Get info API error.");
+	        }
+	      });
+      }
+
+      // count the occurency in array
+      function count_occurency(arr) {
+        var a = [], b = [], prev;
+        
+        arr.sort();
+        for ( var i = 0; i < arr.length; i++ ) {
+            if ( arr[i] !== prev ) {
+                a.push(arr[i]);
+                b.push(1);
+            } else {
+                b[b.length-1]++;
+            }
+            prev = arr[i];
+        }
+        return [a, b];
+      }
+
+      google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+
+  <body>
+
+    <!-- Drawing the map -->
+    <div id="map-container">
+    	<div id="map">
+    	</div>
+    </div>
+
+  </body>
+
+</html>
