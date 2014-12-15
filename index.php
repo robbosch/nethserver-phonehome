@@ -1,12 +1,7 @@
 <?php
 
   require_once "RestServer.php";
-
-  // credentials
-  $GLOBALS['$dbhost'] = "__dbhost__";
-  $GLOBALS['$dbuser'] = "__dbuser__";
-  $GLOBALS['$dbpass'] = "__dbpass__";
-  $GLOBALS['$dbname'] = "__dbname__";
+  require_once "config.php";
 
   class AddInfo {
      public function add_info($uuid, $release) {
@@ -15,18 +10,14 @@
       $ip = $_SERVER['REMOTE_ADDR']; 
 
       // get country code from ip
-      $country_code = file_get_contents("http://ipinfo.io/{$ip}/country");
+      $country_code = trim(file_get_contents("http://ipinfo.io/{$ip}/country"));
 
       // get country name
-      $country_infos = file_get_contents("http://restcountries.eu/rest/v1/alpha/".$country_code);
+      $country_infos = trim(file_get_contents("http://restcountries.eu/rest/v1/alpha/".$country_code));
       $country_obj = json_decode($country_infos, true);
       $country_name = $country_obj['name'];
-
-      //get coordinates
-      $country_coordinates_infos = file_get_contents("http://maps.googleapis.com/maps/api/geocode/json?address=".$country_name);
-      $country_coordinates = json_decode($country_coordinates_infos, true);
-      $country_lat = $country_coordinates['results']['0']['geometry']['location']['lat'];
-      $country_lng = $country_coordinates['results']['0']['geometry']['location']['lng'];
+      $country_lat = $country_obj['latlng']['0'];
+      $country_lng = $country_obj['latlng']['1'];
 
       try {
         // get connession
