@@ -33,5 +33,6 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 
 %files -f %{name}-%{version}-filelist
 %defattr(-,root,root)
+%config(noreplace) %attr(644,root,root) /etc/sysconfig/phone-home 
 
 %changelog
