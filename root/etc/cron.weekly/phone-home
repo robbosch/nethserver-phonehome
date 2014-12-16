@@ -3,7 +3,7 @@
 . /etc/sysconfig/phone-home
 
 # get status variable from config file
-STATUS=`/sbin/e-smith/config get phone-home status`
+STATUS=`/sbin/e-smith/config getprop phone-home status`
 
 # check if status if disabled
 if [ "$STATUS" == "disabled" ]; then
