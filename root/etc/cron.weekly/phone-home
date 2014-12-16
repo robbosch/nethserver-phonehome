@@ -47,4 +47,4 @@ PROXY_OPTIONS="$PROXY_OPTIONS_SERVER $PROXY_OPTIONS_USER"
 UUID=`/bin/cat /var/lib/yum/uuid`
 RELEASE=`/sbin/e-smith/config getprop sysconfig Version`
 
-curl -X POST --data "method=add_info&uuid=$UUID&release=$RELEASE" $PROXY_OPTIONS http://$SERVER_IP/phone-home/index.php
+curl -s -X POST --data "method=add_info&uuid=$UUID&release=$RELEASE" $PROXY_OPTIONS http://$SERVER_IP/phone-home/index.php
