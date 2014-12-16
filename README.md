@@ -16,7 +16,7 @@ Files:
 You need to set the correct placeholder to get access of DataBase and REST API.
 
 ##### Change placeholders
-File ```config.php``` line ```5-9``` change ```__dbhost__, __dbuser__, __dbpass__, __dbname__```
+File ```config.php``` line ```2``` change ```__dbhost__, __dbuser__, __dbpass__, __dbname__```
 ```sh
   // credentials
   $GLOBALS['$dbhost'] = "__dbhost__";
@@ -25,7 +25,7 @@ File ```config.php``` line ```5-9``` change ```__dbhost__, __dbuser__, __dbpass_
   $GLOBALS['$dbname'] = "__dbname__";
 ```
 
-File ```widget_map.html``` line ```36``` change ``` __serverip__```
+File ```widget_map.html``` line ```53``` change ```__serverip__```
 ```sh
 // ip server with api
 var server_ip = '__serverip__';
