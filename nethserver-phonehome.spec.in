@@ -36,6 +36,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %config(noreplace) %attr(644,root,root) /etc/sysconfig/phone-home 
 
 %changelog
+* Fri Dec 19 2014 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.1-1.ns6
+- Phone Home: generate uuid  - Bug #2988 [NethServer]
+
 * Tue Dec 16 2014 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.0-1.ns6
 - First release of phone home - Feature #2975 [NethServer]
 
