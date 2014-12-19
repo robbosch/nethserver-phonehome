@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# Generate UUID if not exists 
+#
+
+uuid=`/sbin/e-smith/config getprop phone-home uuid`
+
+if [ "x$uuid" == "x" ]; then
+    /sbin/e-smith/config setprop phone-home uuid `/usr/bin/uuidgen`
+fi
+
+exit 0
