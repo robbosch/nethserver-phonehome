@@ -31,5 +31,6 @@ my $event = 'nethserver-phonehome-update';
 
 event_actions($event, qw(
       initialize-default-databases 00
+      nethserver-phonehome-conf    30
 ));
 
