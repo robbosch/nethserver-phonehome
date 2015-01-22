@@ -85,10 +85,13 @@
                 FROM      ( SELECT  country_code,
                                     release_tag,
                                     country_name,
+                                    reg_date,
                                     COUNT(release_tag) AS num
                             FROM phone_home_tb
                             GROUP BY release_tag, country_code
                           ) AS t
+
+                WHERE     reg_date >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
 
                 GROUP BY  country_code;";
 
