@@ -3,33 +3,46 @@
   require_once "RestServer.php";
   require_once "config.php";
 
+  include("geoip/src/geoip.inc");
+
   class AddInfo {
      public function add_info($uuid, $release) {
 
-		  // get ip from remote address
-      $ip = $_SERVER['REMOTE_ADDR']; 
+	  // get ip from remote address
+      $ip = $_SERVER['REMOTE_ADDR'];
+
+      // get geodata
+      $gi = geoip_open("/usr/share/GeoIP/GeoIP.dat", GEOIP_STANDARD);
 
       // get country code from ip
-      $country_code = trim(file_get_contents("http://ipinfo.io/{$ip}/country"));
+      $country_code = geoip_country_code_by_addr($gi, $ip);
 
-      // get country name
-      $country_infos = trim(file_get_contents("http://restcountries.eu/rest/v1/alpha/".$country_code));
-      $country_obj = json_decode($country_infos, true);
-      $country_name = $country_obj['name'];
-      $country_lat = $country_obj['latlng']['0'];
-      $country_lng = $country_obj['latlng']['1'];
+      // get country name from ip
+      $country_name = geoip_country_name_by_addr($gi, $ip);
 
       try {
         // get connession
-        $conn = new PDO("mysql:host=".$GLOBALS['$dbhost'].";dbname=".$GLOBALS['$dbname']."", $GLOBALS['$dbuser'], $GLOBALS['$dbpass']);
+        $conn = new PDO("mysql:host=".$GLOBALS['$dbhost'].
+                        ";dbname=".$GLOBALS['$dbname'].
+                        "", $GLOBALS['$dbuser'], $GLOBALS['$dbpass']);
 
         // set the PDO error mode to exception
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // insert query
-        $sql = "REPLACE INTO phone_home_tb (uuid, release_tag, ip, country_code, country_name, country_location_lat, country_location_lng, reg_date)
-                VALUES (:uuid, :release, :ip, :country_code, :country_name, :country_location_lat, :country_location_lng, NOW())";
-        
+        $sql = "REPLACE INTO phone_home_tb (uuid,
+                                            release_tag,
+                                            ip,
+                                            country_code,
+                                            country_name,
+                                            reg_date)
+                VALUES (:uuid,
+                        :release,
+                        :ip,
+                        :country_code,
+                        :country_name,
+                        NOW())";
+
         // prepare statement
         $stmt = $conn->prepare($sql);
 
@@ -38,9 +51,7 @@
                               ':release'              => $release,
                               ':ip'                   => $ip,
                               ':country_code'         => $country_code,
-                              ':country_name'         => $country_name,
-                              ':country_location_lat' => $country_lat,
-                              ':country_location_lng' => $country_lng
+                              ':country_name'         => $country_name
                             ));
 
         // close connession
@@ -59,15 +70,27 @@
 
       try {
         // get connession
-        $conn = new PDO("mysql:host=".$GLOBALS['$dbhost'].";dbname=".$GLOBALS['$dbname']."", $GLOBALS['$dbuser'], $GLOBALS['$dbpass']);
+        $conn = new PDO("mysql:host=".$GLOBALS['$dbhost'].
+                        ";dbname=".$GLOBALS['$dbname'].
+                        "", $GLOBALS['$dbuser'], $GLOBALS['$dbpass']);
 
         // set the PDO error mode to exception
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // select query
-        $sql = "SELECT    COUNT(country_name) AS num_installation, release_tag, country_name, country_location_lat, country_location_lng
-                FROM      phone_home_tb
-                GROUP BY  country_name, release_tag;";
+        $sql = "SELECT    country_code,
+                          GROUP_CONCAT(CONCAT( release_tag,'#',num)) AS installations,
+                          country_name
+
+                FROM      ( SELECT  country_code,
+                                    release_tag,
+                                    country_name,
+                                    COUNT(release_tag) AS num
+                            FROM phone_home_tb
+                            GROUP BY release_tag, country_code
+                          ) AS t
+
+                GROUP BY  country_code;";
 
         // prepare statement
         $stmt = $conn->prepare($sql);
@@ -80,11 +103,9 @@
 
         // set the resulting array to associative
         for($i=0; $row = $stmt->fetch(); $i++){
-          array_push($infos, array( 'num_installation'      => $row['num_installation'],
-                                    'release_tag'           => $row['release_tag'],
-                                    'country_name'          => $row['country_name'],
-                                    'country_location_lat'  => $row['country_location_lat'],
-                                    'country_location_lng'  => $row['country_location_lng']
+          array_push($infos, array( 'installations'         => $row['installations'],
+                                    'country_code'          => $row['country_code'],
+                                    'country_name'          => $row['country_name']
                                   ));
         }
 
