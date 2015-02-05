@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE>
 <html>
   <head>
@@ -92,7 +94,6 @@
 
             var respObj = JSON.parse(resp);
             var jsObj = JSON.parse(respObj);
-
             var conquered_country = [];
             var nethservers = jsObj.nethservers;
 
@@ -124,9 +125,8 @@
               }
 
               installations_global += total_installations;
-
               if(country_name != '' && country_code != '') {
-                  var content =   '<div id="content" style="">'+
+              var content =   '<div id="content" style="">'+
                                   '<div id="siteNotice"></div>'+
                                   '<div id="bodyContent">'+
                                   '<table class="example-table">' +
@@ -140,7 +140,7 @@
                   createMarker(content, country_name, map, total_installations);
 
                   conquered_country.push(""+country_code+"")
-              }
+          }
             }
 
             $('#resume').text(installations_global.toString());
@@ -171,8 +171,7 @@
         if(!window.infowindow)
           window.infowindow=new google.maps.InfoWindow();
 
-        geocoder = new google.maps.Geocoder();
-
+        var geocoder = new google.maps.Geocoder();
         geocoder.geocode( { 'address': country_name }, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 var marker = new MarkerWithLabel({
@@ -189,6 +188,8 @@
                     infowindow.setContent(content);
                     infowindow.open(map, this);
                 });
+        } else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+                setTimeout(function() { createMarker(content, country_name, map, total_installations); }, 200);
             } else {
                 alert("Geocode was not successful for the following reason: " + status);
             }
