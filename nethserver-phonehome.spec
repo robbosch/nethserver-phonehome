@@ -1,7 +1,7 @@
 Summary: NethServer phone-home
 Name: nethserver-phonehome
-Version: @@VERSION@@
-Release: @@RELEASE@@
+Version: 1.0.1
+Release: 1
 License: GPL
 URL: %{url_prefix}/%{name} 
 Source0: %{name}-%{version}.tar.gz
