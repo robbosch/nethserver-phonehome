@@ -79,7 +79,7 @@
 
         // select query
         $sql = "SELECT    country_code,
-                          GROUP_CONCAT(CONCAT( release_tag,'#',num)) AS installations,
+                          GROUP_CONCAT(CONCAT( release_tag,'#',num )) AS installations,
                           country_name
 
                 FROM      ( SELECT  country_code,
@@ -88,10 +88,9 @@
                                     reg_date,
                                     COUNT(release_tag) AS num
                             FROM phone_home_tb
+                            WHERE reg_date >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
                             GROUP BY release_tag, country_code
                           ) AS t
-
-                WHERE     reg_date >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
 
                 GROUP BY  country_code;";
 
