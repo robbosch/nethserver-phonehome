@@ -8,8 +8,6 @@ Source0: %{name}-%{version}.tar.gz
 BuildArch: noarch
 
 Requires: nethserver-base
-
-BuildRequires: perl
 BuildRequires: nethserver-devtools 
 
 %description
@@ -22,18 +20,15 @@ NethServer simple phone-home software.
 perl createlinks
 
 %install
-rm -rf $RPM_BUILD_ROOT
-(cd root; find . -depth -print | cpio -dump $RPM_BUILD_ROOT)
-%{genfilelist} $RPM_BUILD_ROOT > %{name}-%{version}-filelist
-echo "%doc COPYING" >> %{name}-%{version}-filelist
-
-%post
-
-%preun
+rm -rf %{buildroot}
+(cd root; find . -depth -print | cpio -dump %{buildroot})
+%{genfilelist} %{buildroot} > %{name}-%{version}-filelist
 
 %files -f %{name}-%{version}-filelist
 %defattr(-,root,root)
 %config(noreplace) %attr(644,root,root) /etc/sysconfig/phone-home 
+%doc COPYING
+%dir %{_nseventsdir}/%{name}-update
 
 %changelog
 * Tue Mar 03 2015 Davide Principi <davide.principi@nethesis.it> - 1.1.0-1
