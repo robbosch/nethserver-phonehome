@@ -1,6 +1,6 @@
 Summary: NethServer phone-home
 Name: nethserver-phonehome
-Version: 1.1.0
+Version: 1.1.1
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -36,6 +36,9 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %config(noreplace) %attr(644,root,root) /etc/sysconfig/phone-home 
 
 %changelog
+* Mon Jun 08 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.1.1-1
+- Phone Home: change default checkbox selection - Enhancement #3152 [NethServer]
+
 * Tue Mar 03 2015 Davide Principi <davide.principi@nethesis.it> - 1.1.0-1
 - nethserver-devbox replacements - Feature #3009 [NethServer]
 - Phone home wizard page - Feature #2997 [NethServer]
