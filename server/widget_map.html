@@ -126,7 +126,7 @@
 
               installations_global += total_installations;
               if(country_name != '' && country_code != '') {
-              var content =   '<div id="content" style="">'+
+                var content =   '<div id="content" style="">'+
                                   '<div id="siteNotice"></div>'+
                                   '<div id="bodyContent">'+
                                   '<table class="example-table">' +
@@ -137,9 +137,11 @@
                                   '</div>'+
                                   '</div>';
 
-                  createMarker(content, country_name, map, total_installations);
-
-                  conquered_country.push(""+country_code+"")
+                if(total_installations >= 1000){
+                  total_installations = Math.floor(total_installations/1000).toString() +'K+';
+                }
+                createMarker(content, country_name, map, total_installations);
+                conquered_country.push(""+country_code+"")
           }
             }
 
