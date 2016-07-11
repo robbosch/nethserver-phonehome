@@ -52,19 +52,14 @@ else
 fi
 
 if [ "x$PROXY_USER" != "x" ]; then
-   # set param curl
-   PROXY_OPTIONS_USER="--proxy-user $PROXY_USER"
+    if [ "x$PROXY_PASS" != "x" ]; then
+        PROXY_OPTIONS_USER="--proxy-user '$PROXY_USER:$PROXY_PASS'"
+    else
+        PROXY_OPTIONS_USER="--proxy-user '$PROXY_USER'"
+    fi
 else
-   # default
-   PROXY_OPTIONS_USER=""
-fi
-
-if [ "x$PROXY_PASS" != "x" ]; then
-   # set param curl
-   PROXY_OPTIONS_USER="$PROXY_OPTIONS_USER:$PROXY_PASS"
-else
-   # default
-   PROXY_OPTIONS_USER=""
+    # default
+    PROXY_OPTIONS_USER=""
 fi
 
 #get proxy options
