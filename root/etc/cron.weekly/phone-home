@@ -25,6 +25,10 @@
 
 # get status variable from config file
 STATUS=`/sbin/e-smith/config getprop phone-home status`
+PROXY_SERVER=`/sbin/e-smith/config getprop proxy host`
+PROXY_PORT=`/sbin/e-smith/config getprop proxy port`
+PROXY_USER=`/sbin/e-smith/config getprop proxy user`
+PROXY_PASS=`/sbin/e-smith/config getprop proxy password`
 
 # check if status if disabled
 if [ "$STATUS" == "disabled" ]; then
