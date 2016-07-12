@@ -1,6 +1,6 @@
 Summary: NethServer phone-home
 Name: nethserver-phonehome
-Version: 1.2.0
+Version: 1.2.1
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -31,6 +31,9 @@ rm -rf %{buildroot}
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Tue Jul 12 2016 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.2.1-1
+- Add upstream proxy configuration #5046
+
 * Thu Jul 07 2016 Stefano Fancello <stefano.fancello@nethesis.it> - 1.2.0-1
 - First NS7 release
 
