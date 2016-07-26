@@ -66,8 +66,7 @@
   }
 
   class GetInfo {
-    public function get_info() {
-
+    public function get_info($interval) {
       try {
         // get connession
         $conn = new PDO("mysql:host=".$GLOBALS['$dbhost'].
@@ -87,12 +86,15 @@
                                     country_name,
                                     reg_date,
                                     COUNT(release_tag) AS num
-                            FROM phone_home_tb
-                            WHERE reg_date >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
-                            GROUP BY release_tag, country_code
-                          ) AS t
+                            FROM phone_home_tb ";
 
-                GROUP BY  country_code;";
+        if ($interval!=='1') {
+          $sql .= " WHERE reg_date >= DATE_SUB(CURDATE(), INTERVAL $interval DAY)";
+        }
+
+        $sql .= " GROUP BY release_tag, country_code
+        ) AS t
+        GROUP BY  country_code;";
 
         // prepare statement
         $stmt = $conn->prepare($sql);
@@ -115,7 +117,8 @@
         $conn = null;
 
         // return info inserted
-        return '{"nethservers":'.json_encode($infos).'}';
+        header('Content-Type: application/json');
+        echo json_encode($infos);
 
       }
       catch(PDOException $e) {

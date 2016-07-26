@@ -1,0 +1,110 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+#menu ul {
+    padding: 0;
+    margin: 0;
+}
+#menu li {
+    font-family: sans-serif;
+    font-size: 100%;
+    position: relative;
+    float: left;
+    width: 150px;
+    text-align: center;
+    list-style: none;
+}
+#menu li a {
+    font-family: sans-serif;
+    font-size: 100%;
+    background-color: #454545;
+    color: #FFF;
+    padding: 12px 20px;
+    text-decoration: none;
+    display: block;
+    height: 5px;
+    line-height: 5px;
+}
+#menu li a:hover {
+    background-color: #4d4d4d;
+    text-shadow: 0px 0px 1px #FFF;
+}
+#menu ul ul {
+    z-index: 100;
+    position: absolute;
+    top: 29px;
+    visibility: hidden;
+}
+#menu ul li:hover ul {
+    visibility: visible;
+}
+#menu ul ul li a {
+    background-color: #3A3A3A;
+}
+#menu ul ul li a:hover {
+    background-color: #3F3F3F;
+}
+#map-container {
+    z-index: 10;
+}
+#map {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    z-index: 10;
+}
+.example-table-content {
+    font-family: sans-serif;
+    font-size: 100%;
+}
+.example-table {
+    font-family: sans-serif;
+    font-size: 100%;
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    overflow-y: hidden;
+    background: #406d80;
+    min-height: 40px;
+    border: 1px solid;
+    border-color: #819199;
+    border-left: none;
+    border-top: none;
+}
+.example-table th {
+    background-color: #406d80;
+    font-weight: bold;
+    color: white;
+    padding: 1px 15px;
+    text-align: center;
+}
+.example-table td {
+    background-color: rgb(238, 238, 238);
+    padding: 1px 15px;
+    color: rgb(55, 55, 55);
+}
+.example-table-content th {
+    background-color: #406d80;
+    font-weight: bold;
+    color: white;
+    padding: 2px 15px;
+    text-align: center;
+}
+.example-table-content td {
+    background-color: rgb(238, 238, 238);
+    padding: 9px 15px;
+    color: rgb(55, 55, 55);
+}
+td {
+    text-align: center;
+}
+tr {
+    text-align: center;
+}
+.labels {
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
