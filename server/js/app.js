@@ -145,7 +145,7 @@ function initMap() {
         }
         
         $.ajax({
-            url: "http://" + server_ip + "/phonehome/index.php",
+            url: "http://" + server_ip + "/phone-home/index.php",
             type: "GET",
             data: "method=get_info&interval=" + interval,
             success: function(resp) {
@@ -203,7 +203,7 @@ function initMap() {
                     query: {
                         select: 'geometry',
                         from: '1-d8ajjL0fDhYxx1lYoISmYfOryQX6uYdTK-bmmuK',
-                        where: "ISO2 IN ('" + conquered_country.join("', '") + "')"
+                        where: "ISO2 IN ('" + conquered_country.join("','") + "')"
                     },
                     map: map,
                     suppressInfoWindows: true
@@ -248,7 +248,7 @@ function initMap() {
                     createMarker(content, country_name, map, total_installations);
                 }, 200);
             } else {
-                alert("Geocode was not successful for the following reason: " + status);
+                console.log("Geocode was not successful for the following reason: " + status);
             }
         });
     }
