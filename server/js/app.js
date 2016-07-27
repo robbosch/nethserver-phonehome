@@ -139,11 +139,13 @@ function initMap() {
             interval_menu.innerHTML = "Last 6 months";
         else if (interval == '365')
             interval_menu.innerHTML = "Last year";
-        else {
-            interval = '1';
+        else if (interval == '1')
             interval_menu.innerHTML = "All";
+        else {
+            interval = '7';
+            interval_menu.innerHTML = "Last week";
         }
-        
+
         $.ajax({
             url: "http://" + server_ip + "/phone-home/index.php",
             type: "GET",
