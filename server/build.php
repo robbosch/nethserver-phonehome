@@ -82,6 +82,7 @@ for($i=0; $i<=count($country_array)-1; $i++) {
     catch(PDOException $e) {
       echo $e->getMessage();
     }
+    sleep(1);
 }
 
 $sql = "UPDATE country_name_map
