@@ -194,7 +194,7 @@ function initMap() {
                         if (total_installations >= 1000) {
                             total_installations = Math.floor(total_installations / 1000).toString() + 'K+';
                         }
-                        createMarker(content, country_name, map, total_installations);
+                        createMarker(content, country_code, country_name, map, total_installations);
                         conquered_country.push("" + country_code + "")
                     }
                 }
@@ -217,7 +217,7 @@ function initMap() {
         });
     }
 
-    function createMarker(content, country_name, map, total_installations) {
+    function createMarker(content, country_code, country_name, map, total_installations) {
 
         if (total_installations >= 1000)
             total_installations = total_installations / 1000 + 'K';
@@ -227,13 +227,15 @@ function initMap() {
         if (!window.infowindow)
             window.infowindow = new google.maps.InfoWindow();
 
-        var geocoder = new google.maps.Geocoder();
-        geocoder.geocode({
-            'address': country_name
-        }, function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
+        $.ajax({
+            url: "http://" + server_ip + "/phone-home/index.php",
+            type: "GET",
+            data: "method=get_country_coor&country_code=" + country_code,
+            success: function(resp) {
+                var pos = new google.maps.LatLng(parseFloat(resp[0].lat), parseFloat(resp[0].lng));
+                console.log(pos);
                 var marker = new MarkerWithLabel({
-                    position: results[0].geometry.location,
+                    position: pos,
                     map: map,
                     icon: 'images/m1.png',
                     labelContent: total_installations,
@@ -245,12 +247,6 @@ function initMap() {
                     infowindow.setContent(content);
                     infowindow.open(map, marker);
                 });
-            } else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
-                setTimeout(function() {
-                    createMarker(content, country_name, map, total_installations);
-                }, 200);
-            } else {
-                console.log("Geocode was not successful for the following reason: " + status);
             }
         });
     }
