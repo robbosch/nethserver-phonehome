@@ -18,7 +18,7 @@
       $country_code = geoip_country_code_by_addr($gi, $ip);
 
       // get country name from ip
-      $country_name = geoip_country_code_by_addr($gi, $ip);
+      $country_name = geoip_country_name_by_addr($gi, $ip);
 
       try {
         // get connession
