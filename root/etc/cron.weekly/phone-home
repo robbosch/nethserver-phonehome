@@ -71,5 +71,5 @@ UUID=`/sbin/e-smith/config getprop phone-home uuid`
 RELEASE=`/sbin/e-smith/config getprop sysconfig Version`
 
 #send data
-curl -s -X POST --data "method=add_info&uuid=$UUID&release=$RELEASE" $PROXY_OPTIONS http://$SERVER_IP/phone-home/index.php
+curl -L -s -X POST --data "method=add_info&uuid=$UUID&release=$RELEASE" $PROXY_OPTIONS https://$SERVER_IP/index.php
 

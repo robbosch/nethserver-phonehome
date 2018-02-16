@@ -1,5 +1,1 @@
-SERVER_IP=www.nethserver.org
-PROXY_SERVER=
-PROXY_USER=
-PROXY_PASS=
-PROXY_PORT=
+SERVER_IP=phonehome.nethserver.org
