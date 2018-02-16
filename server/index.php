@@ -12,7 +12,7 @@
       $ip = $_SERVER['REMOTE_ADDR'];
 
       // get geodata
-      $gi = geoip_open("/usr/share/GeoIP/GeoIP.dat", GEOIP_STANDARD);
+      $gi = geoip_open("geoip/GeoIP.dat", GEOIP_STANDARD);
 
       // get country code from ip
       $country_code = geoip_country_code_by_addr($gi, $ip);

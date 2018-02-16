@@ -4,7 +4,7 @@ function initMap() {
     });
     google.setOnLoadCallback(initialize);
     // ip server with api
-    var server_ip = '__serverip__';
+    var server_ip = 'phonehome.nethserver.org';
 
     function initialize() {
 
@@ -147,7 +147,7 @@ function initMap() {
         }
 
         $.ajax({
-            url: "http://" + server_ip + "/phone-home/index.php",
+            url: "https://" + server_ip + "/index.php",
             type: "GET",
             data: "method=get_info&interval=" + interval,
             success: function(resp) {
@@ -226,14 +226,13 @@ function initMap() {
 
         if (!window.infowindow)
             window.infowindow = new google.maps.InfoWindow();
-
         $.ajax({
-            url: "http://" + server_ip + "/phone-home/index.php",
+            url: "https://" + server_ip + "/index.php",
             type: "GET",
             data: "method=get_country_coor&country_code=" + country_code,
             success: function(resp) {
+		console.log(resp, country_code)
                 var pos = new google.maps.LatLng(parseFloat(resp[0].lat), parseFloat(resp[0].lng));
-                console.log(pos);
                 var marker = new MarkerWithLabel({
                     position: pos,
                     map: map,
