@@ -1,6 +1,6 @@
 Summary: NethServer phone-home
 Name: nethserver-phonehome
-Version: 1.1.2
+Version: 1.1.3
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -36,6 +36,10 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %config(noreplace) %attr(644,root,root) /etc/sysconfig/phone-home 
 
 %changelog
+* Fri Mar 02 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.1.3-1
+- Client now follows HTTP redirects
+- Phone home server new host: https://phonehome.nethserver.org/
+
 * Tue Sep 29 2015 Davide Principi <davide.principi@nethesis.it> - 1.1.2-1
 - Make Italian language pack optional - Enhancement #3265 [NethServer]
 
