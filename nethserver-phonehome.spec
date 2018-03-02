@@ -1,6 +1,6 @@
 Summary: NethServer phone-home
 Name: nethserver-phonehome
-Version: 1.2.1
+Version: 1.3.0
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -31,6 +31,10 @@ rm -rf %{buildroot}
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Fri Mar 02 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.0-1
+- Client now follows HTTP redirects
+- Phone home server new host: https://phonehome.nethserver.org/
+
 * Tue Jul 12 2016 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.2.1-1
 - Add upstream proxy configuration #5046
 
